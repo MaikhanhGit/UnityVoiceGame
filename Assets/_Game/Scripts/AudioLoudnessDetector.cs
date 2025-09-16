@@ -33,11 +33,7 @@ public class AudioLoudnessDetector : MonoBehaviour
     }
 
     public void GetMicInput()
-    {
-        foreach (var micName in Microphone.devices)
-        {
-            Debug.Log(micName);
-        }
+    {        
         if (_useMic)
         {
             if (Microphone.devices.Length > 0)
@@ -50,19 +46,25 @@ public class AudioLoudnessDetector : MonoBehaviour
             else
             {
                 Debug.Log("No Microphone Detected");
+                return;
             }
-        }
-        else
-        {
-            Debug.Log("Do you want to use the Phone's Microphone?");
-        }
-
+        }       
 
     }
 
     public float GetLoudnessFromMic()
     {
-        return GetAudioLoudness(Microphone.GetPosition(Microphone.devices[0]), _micAudio);
+        if (Microphone.devices[0] != null)
+        {
+            return GetAudioLoudness(Microphone.GetPosition(Microphone.devices[0]), _micAudio);
+            
+        }
+        else
+        {
+            Debug.Log("No Mic Detected");
+            return 0f;
+        }
+       
     }
 
     public float GetAudioLoudness(int clipPosition, AudioClip clip)

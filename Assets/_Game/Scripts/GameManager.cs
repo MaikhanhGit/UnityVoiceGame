@@ -6,27 +6,46 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] int _playSceneToLoad = 1;
+    [SerializeField] private string _playSceneToLoad = "Sandbox";
+    [SerializeField] private TouchInputManager _touchInputManager;
+    [SerializeField] private GameObject _pauseMenu = null;
+
+    public void StartGame()
+    {
+        if(_playSceneToLoad != null)
+        {
+            Debug.Log("Start Game");
+            SceneManager.LoadScene(_playSceneToLoad);
+        }
+        
+    }
 
     private void Update()
     {
-        if (Keyboard.current.escapeKey.wasPressedThisFrame == true)
+        
+    }
+
+    public void PauseGame()
+    {          
+        Debug.Log("Game Paused");   
+        if(_pauseMenu != null)
         {
-            Debug.Log("Exit Game");
-            return;
+           
         }
+        //stop Boss            
+        //stop Voice Input       
+
     }
 
-    private void StartGame()
+    public void OpenWin()
     {
-        Debug.Log("Start Game");
-        SceneManager.LoadScene(_playSceneToLoad);
+        SceneManager.LoadScene("WinScene");
     }
-
-    private void ExitGame()
+    
+    public void ExitGame()
     {
         Debug.Log("Exit");
-        
+        Application.Quit();
 
     }
 }
