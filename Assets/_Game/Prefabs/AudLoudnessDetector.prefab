@@ -44,3 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bacbe6452182dcb429cbdbd2abc3760f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _audLoudness: 0
+  _loudnessSens: 40
+  _maxLoudnessAllowed: 5
+  _rollThreshold: 0.1
+  _jumpThreshold: 3
+  _mouthScaleSens: 1
+  _player: {fileID: 0}
+  _scalingGeo: {fileID: 0}

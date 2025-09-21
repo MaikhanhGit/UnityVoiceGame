@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Android;
 
@@ -8,15 +9,15 @@ public class AudioLoudnessDetector : MonoBehaviour
     private int _sampleWindow = 64;
     private AudioClip _micAudio = null;
     private string _micName = null;
+    public float _audLoudness = 0f;
        
     [SerializeField] private float _loudnessSens = 40;
     [SerializeField] public float _maxLoudnessAllowed = 5f;
-    [SerializeField] private float _rollThreshold = 0.1f;
-    
+    [SerializeField] private float _rollThreshold = 0.1f;      
     [SerializeField] private float _jumpThreshold = 3f;
-    
-    
+    [SerializeField] private float _mouthScaleSens = 1f;
     [SerializeField] private GameObject _player = null;
+    
     private PlayerController _playerController = null;
 
     private void Start()
@@ -34,13 +35,17 @@ public class AudioLoudnessDetector : MonoBehaviour
             loudness = 0;
         }
         else if (loudness < _jumpThreshold && loudness >= _rollThreshold)
-        {            
+        {
             _playerController.RollBall(loudness);
+            _playerController.ScaleRollMouth(loudness);
         }
+
         else if (loudness >= _jumpThreshold)
-        {            
-            _playerController.ThrustBall(loudness);                           
+        {
+            _playerController.ThrustBall(loudness);
+            _playerController.ScaleJumpMouth(loudness);
         }
+        
     }
 
     public bool GetMicInput()
@@ -82,6 +87,7 @@ public class AudioLoudnessDetector : MonoBehaviour
         else
         {
             Debug.Log("No Mic Detected");
+
             return 0f;
         }
        
@@ -93,7 +99,8 @@ public class AudioLoudnessDetector : MonoBehaviour
 
         if (startPosition < 0)
         {
-            return 0;
+            _audLoudness = 0f;
+            return _audLoudness;
         }
         else
         {
@@ -109,7 +116,8 @@ public class AudioLoudnessDetector : MonoBehaviour
                 totalLoudness += Mathf.Abs(waveData[i]);
             }
 
-            return totalLoudness / _sampleWindow;
+            _audLoudness = totalLoudness / _sampleWindow;
+            return _audLoudness;
         }
             
     }

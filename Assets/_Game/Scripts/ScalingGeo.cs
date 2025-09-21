@@ -1,13 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Android;
 
-public class ScaleFromMicInput : MonoBehaviour
+public class ScalingGeo : MonoBehaviour
 {
     [SerializeField] Vector3 _minScale;
     [SerializeField] Vector3 _maxScale;
     [SerializeField] float _loudnessSens = 250;
-    [SerializeField] float _threshold = 0.1f;    
+    [SerializeField] float _threshold = 0.1f;
     [SerializeField] float _yRotationRate = 15f;
     [SerializeField] GameObject _objectToScale = null;
     [SerializeField] AudioLoudnessDetector _detector = null;
@@ -34,5 +35,8 @@ public class ScaleFromMicInput : MonoBehaviour
     {
         _objectToScale.transform.Rotate(0.0f, _yRotationRate * loudness, 0.0f, Space.Self);
     }
+
+
+
 
 }
