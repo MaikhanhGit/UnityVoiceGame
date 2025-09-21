@@ -5,15 +5,12 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float _speed = 0.1f;
-    [SerializeField] private float _rollSpeedMultiplier = 5f;
-    [SerializeField] AudioLoudnessDetector _loudnessDetector = null;    
-    [SerializeField] private float _loudnessSens = 40;
-    [SerializeField] private float _rollThreshold = 0.1f;
-    [SerializeField] private float _jumpThreshold = 0.5f;
-    [SerializeField] private float _jumpPercent = 0.1f;
+    [SerializeField] private float _rollSpeedMultiplier = 1.5f;       
+    [SerializeField] private float _jumpPercent = 3f;    
     [SerializeField] private float _gravityAdd = 2f;
     [SerializeField] private GameManager _gameManager;
-
+    [SerializeField] AudioLoudnessDetector _loudnessDetector = null;
+    private float _maxLoudnessAllowed;
     private Rigidbody _rigid;
     private Transform _iniTransform;
 
@@ -21,56 +18,46 @@ public class PlayerController : MonoBehaviour
     {
         _rigid = GetComponent<Rigidbody>();
         _iniTransform = GetComponent<Transform>();
+        _maxLoudnessAllowed = _loudnessDetector._maxLoudnessAllowed;
     }
 
 
-    private void Update()
-    {
-        float loudness = _loudnessDetector.GetLoudnessFromMic() * _loudnessSens;
-
-        if (loudness < _rollThreshold)
-        {
-            loudness = 0;
-        }
-        else if (loudness < _jumpThreshold)
-        {
-            RollBall(loudness);
-        }
-        else if (loudness >= _jumpThreshold)
-        {
-            ThrustBall(loudness);
-        }
-        
-    }   
-
-   
     private void FixedUpdate()
     {
         // make ball heavier by adding downward force
         _rigid.AddForce(Physics.gravity * _gravityAdd, ForceMode.Acceleration);
+                        
+    }      
+   
 
-
+    public void RollBall(float loudness)
+    {
+        _rigid.AddForce(Vector3.right * (_speed * _rollSpeedMultiplier + loudness));        
+       
     }
 
-    private void RollBall(float loudness)
-    {
-        _rigid.AddForce(Vector3.right * (_speed * _rollSpeedMultiplier + loudness));
-    }
-
-    private void ThrustBall(float loudness)
-    {
+    public void ThrustBall(float loudness)
+    {       
+        if (loudness > _maxLoudnessAllowed)
+        {
+            Debug.Log("Loudness: " + loudness);
+            loudness = _maxLoudnessAllowed;                                      
+        }
+        Debug.Log("Loudness Used: " + loudness);
+        
         _rigid.AddForce(Vector3.right * (_speed + loudness) * _jumpPercent/2);
-        _rigid.AddForce(Vector3.up * (_speed + loudness * _jumpPercent));
+        _rigid.AddForce(Vector3.up * (_speed + loudness * _jumpPercent));       
+        
     }
 
     public void KillPlayer()
-    {
-        Debug.Log("Kill Player");
-        RestartGame();
+    {             
         Transform currentTrans = gameObject.GetComponent<Transform>();
         gameObject.GetComponent<Transform>().SetPositionAndRotation(_iniTransform.position, _iniTransform.rotation);
         _rigid.velocity = new Vector3(0, 0, 0);
-        
+
+        RestartGame();
+
     }
 
     private void RestartGame()

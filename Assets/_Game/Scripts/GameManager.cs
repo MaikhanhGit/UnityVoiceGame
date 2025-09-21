@@ -1,37 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Android;
 using UnityEngine.InputSystem;
 using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    [SerializeField] private string _playSceneToLoad = "Sandbox";
-    [SerializeField] private TouchInputManager _touchInputManager;
-    [SerializeField] private GameObject _pauseMenu = null;
+    [SerializeField] private int _playSceneToLoad = 4;
+    [SerializeField] private GameObject _audioLoudnessDetector;
+    private bool _isMicAvailable = false;
 
-    public void StartGame()
+    private void Awake()
     {
-        if(_playSceneToLoad != null)
+        _isMicAvailable = _audioLoudnessDetector.GetComponent<AudioLoudnessDetector>().GetMicInput();
+
+        if(_isMicAvailable == true)
         {
-            Debug.Log("Start Game");
-            SceneManager.LoadScene(_playSceneToLoad);
+            _audioLoudnessDetector.GetComponent<AudioLoudnessDetector>().GetMicPermission();
         }
         
     }
 
-    private void Update()
-    {
-        
-    }
+    public void StartGame()
+    { // TODO: add a delay
+        Debug.Log("Start Game");
+        SceneManager.LoadScene(_playSceneToLoad);                
+    }   
 
     public void PauseGame()
     {          
-        Debug.Log("Game Paused");   
-        if(_pauseMenu != null)
-        {
-           
-        }
+        Debug.Log("Game Paused");           
+        
         //stop Boss            
         //stop Voice Input       
 

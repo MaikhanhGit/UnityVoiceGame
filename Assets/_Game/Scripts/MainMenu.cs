@@ -3,7 +3,8 @@ using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
 {    
-    public string _startGameScene = "Sandbox";
+    public int _startGameScene = 4;
+    public string _mainMenuScene = "MainMenu";
     public string _optionsScene = "OptionsScene";
     public string _quitScene = "QuitScene";
 
@@ -16,6 +17,11 @@ public class MainMenu : MonoBehaviour
     {
         Debug.Log("Game Started");
         SceneManager.LoadScene(_startGameScene);
+    }
+
+    public void OpenMainMenu()
+    {
+        SceneManager.LoadScene(_mainMenuScene);
     }
 
     public void OpenOptions()
