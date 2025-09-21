@@ -21,7 +21,7 @@ public class PlayerController : MonoBehaviour
     private float _maxLoudnessAllowed;
     private Rigidbody _rigid;
     private Transform _iniTransform;
-    private Vector3 _mouthCurrentScale;
+  
 
     private void Start()
     {
