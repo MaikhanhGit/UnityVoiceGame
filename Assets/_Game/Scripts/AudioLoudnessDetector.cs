@@ -9,7 +9,7 @@ public class AudioLoudnessDetector : MonoBehaviour
     private int _sampleWindow = 64;
     private AudioClip _micAudio = null;
     private string _micName = null;
-    public float _audLoudness = 0f;
+    private float _audLoudness = 0f;
        
     [SerializeField] private float _loudnessSens = 40;
     [SerializeField] public float _maxLoudnessAllowed = 5f;

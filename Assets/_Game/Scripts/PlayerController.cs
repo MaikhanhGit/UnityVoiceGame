@@ -21,6 +21,7 @@ public class PlayerController : MonoBehaviour
     private float _maxLoudnessAllowed;
     private Rigidbody _rigid;
     private Transform _iniTransform;
+    private float _currentSpeed = 1f;
   
 
     private void Start()
@@ -57,7 +58,7 @@ public class PlayerController : MonoBehaviour
         
         ScaleJumpMouth(loudness);
 
-        _rigid.AddForce(Vector3.right * (_speed + loudness) * _jumpPercent/2);
+        _rigid.AddForce(Vector3.right * (_speed + loudness) * _jumpPercent/3);
         _rigid.AddForce(Vector3.up * (_speed + loudness * _jumpPercent));       
         
     }
@@ -73,6 +74,19 @@ public class PlayerController : MonoBehaviour
     {       
         _mouth.transform.localScale = 
             Vector3.Lerp(_jumpMinScale, _jumpMaxScale, loudness * _jumpMouSclSens);        
+    }
+
+    public void PausePlayer()
+    {
+        _currentSpeed = _speed;
+        _speed = 0;
+        _rigid.velocity = new Vector3(0, 0, 0);
+        
+    }
+
+    public void UnPausePlayer()
+    {
+        _speed = _currentSpeed;
     }
 
     public void KillPlayer()

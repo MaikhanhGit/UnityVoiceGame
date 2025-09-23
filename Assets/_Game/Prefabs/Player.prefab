@@ -105,9 +105,9 @@ MonoBehaviour:
   _loudnessDetector: {fileID: 0}
   _mouth: {fileID: 5875408282477110790}
   _rollMinScale: {x: 1, y: 1, z: 1}
-  _rollMaxScale: {x: 3, y: 1.2, z: 1}
+  _rollMaxScale: {x: 2, y: 1.2, z: 1}
   _jumpMinScale: {x: 1, y: 1, z: 1}
-  _jumpMaxScale: {x: 6, y: 1.7, z: 1}
+  _jumpMaxScale: {x: 3, y: 1.5, z: 1}
   _jumpMouSclSens: 0.05
   _rollMouSclSens: 0.1
 --- !u!1 &4275247498286817850
@@ -251,13 +251,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7558240737450741997}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0.7071068, w: 0.7071068}
-  m_LocalPosition: {x: 0, y: 0.055, z: -0.989}
-  m_LocalScale: {x: 0.94073087, y: 0.21950966, z: 0.16504051}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9048142460678375569}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 90}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!33 &8967506138401011721
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -318,7 +318,7 @@ GameObject:
   m_Component:
   - component: {fileID: 46316961072811888}
   - component: {fileID: 6730775185017242602}
-  - component: {fileID: 5773161963424995310}
+  - component: {fileID: 3955910979923605593}
   m_Layer: 0
   m_Name: Point Light
   m_TagString: Untagged
@@ -335,7 +335,7 @@ Transform:
   m_GameObject: {fileID: 8781997799748211674}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.91, z: -3.21}
+  m_LocalPosition: {x: 0, y: -0.03, z: -2.92}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -354,7 +354,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Intensity: 4
-  m_Range: 7
+  m_Range: 20
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -403,7 +403,7 @@ Light:
   m_UseViewFrustumForShadowCasterCull: 1
   m_ShadowRadius: 0
   m_ShadowAngle: 0
---- !u!114 &5773161963424995310
+--- !u!114 &3955910979923605593
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

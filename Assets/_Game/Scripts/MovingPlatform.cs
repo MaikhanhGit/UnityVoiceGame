@@ -12,7 +12,11 @@ public class MovingPlatform : MonoBehaviour
 
     private void Start()
     {
-        _nextPos = _pointB.position;
+        if(_pointA & _pointB != null)
+        {
+            _nextPos = _pointB.position;
+        }
+        
     }
 
     private void FixedUpdate()
@@ -22,7 +26,11 @@ public class MovingPlatform : MonoBehaviour
 
         if (transform.position == _nextPos)
         {
-            _nextPos = (_nextPos == _pointA.position) ? _pointB.position : _pointA.position;
+            if(_pointA && _pointB != null)
+            {
+                _nextPos = (_nextPos == _pointA.position) ? _pointB.position : _pointA.position;
+            }
+            
         }
     }
 }

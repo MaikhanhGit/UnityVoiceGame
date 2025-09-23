@@ -8,7 +8,7 @@ public class WinVolume : MonoBehaviour
     [SerializeField] private float _delayTime = 0.2f;
     private IEnumerator _coroutine;
 
-    private void OnCollisionEnter(Collision other)
+    private void OnTriggerEnter(Collider other)
     {
         _coroutine = StartDelay(_delayTime);
 
@@ -16,7 +16,7 @@ public class WinVolume : MonoBehaviour
         {
             //Add Delay before turn on Win Scene
             StartCoroutine(_coroutine);
-
+            Debug.Log("Win");
             _gameManager.OpenWin();
         }
     }

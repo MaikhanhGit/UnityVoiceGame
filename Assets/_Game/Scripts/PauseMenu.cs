@@ -23,6 +23,7 @@ public class PauseMenu : MonoBehaviour
         if(_gameManager != null)
         {
             Debug.Log("Back To Game");
+            _gameManager.GetComponent<GameManager>().UnPauseGame();
         }
        
     }

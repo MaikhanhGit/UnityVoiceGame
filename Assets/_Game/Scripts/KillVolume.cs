@@ -5,7 +5,7 @@ using UnityEngine;
 public class KillVolume : MonoBehaviour
 {
     [SerializeField] GameManager _gameManager;
-    [SerializeField] private float _delayTime = 0.2f;
+    [SerializeField] private float _delayTime = 0.3f;
     private IEnumerator _coroutine;
 
     private void OnTriggerEnter(Collider other)
@@ -19,7 +19,6 @@ public class KillVolume : MonoBehaviour
             {
                 //Add Delay before turn on Win Scene
                 StartCoroutine(_coroutine);
-
                 playerController.KillPlayer();
             }
             
