@@ -11,6 +11,7 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject _audioLoudnessDetector;
     [SerializeField] private GameObject _boss;
     [SerializeField] private GameObject _player;
+    
 
     private bool _isMicAvailable = false;
    
@@ -30,30 +31,8 @@ public class GameManager : MonoBehaviour
     { // TODO: add a delay
                
         SceneManager.LoadScene(_playSceneToLoad);                
-    }   
-
-    public void PauseGame()
-    {          
-        Debug.Log("Game Paused");           
-        
-        //stop Boss
-        if(_boss.activeSelf == true)
-        {
-            _boss.GetComponent<MovingPlatform>().enabled = false;
-        }
-        //stop Voice Input
-        _player.GetComponent<PlayerController>().PausePlayer();
-
     }
-
-    public void UnPauseGame()
-    {
-        if (_boss.activeSelf == true)
-        {
-            _boss.GetComponent<MovingPlatform>().enabled = true;
-        }
-        _player.GetComponent< PlayerController > ().UnPausePlayer();
-    }
+    
 
     public void OpenWin()
     {

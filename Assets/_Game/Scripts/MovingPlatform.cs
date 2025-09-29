@@ -20,7 +20,7 @@ public class MovingPlatform : MonoBehaviour
     }
 
     private void FixedUpdate()
-    {
+    {        
         transform.position = Vector3.MoveTowards(transform.position, 
             _nextPos, _movingSpeed * Time.deltaTime);
 

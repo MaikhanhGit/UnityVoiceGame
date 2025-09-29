@@ -16,7 +16,7 @@ public class WinVolume : MonoBehaviour
         {
             //Add Delay before turn on Win Scene
             StartCoroutine(_coroutine);
-            Debug.Log("Win");
+          
             _gameManager.OpenWin();
         }
     }

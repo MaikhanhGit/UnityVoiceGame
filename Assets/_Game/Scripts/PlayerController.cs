@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 
 public class PlayerController : MonoBehaviour
@@ -18,14 +19,22 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Vector3 _jumpMaxScale;
     [SerializeField] private float _jumpMouSclSens = 0.05f;
     [SerializeField] private float _rollMouSclSens = 0.1f;
+    [SerializeField] private float _delayTime = 0.3f;    
+    [SerializeField] AudioClip _sfxKilled = null;
+    [SerializeField] float _sfxVolume = 1f;
+    [SerializeField] ParticleSystem _killedParticles = null;
+    [SerializeField] GameObject _playerVisualToDisable = null;
     private float _maxLoudnessAllowed;
     private Rigidbody _rigid;
     private Transform _iniTransform;
-    private float _currentSpeed = 1f;
-  
+    private bool _isKilled = false;
+ 
+    private Coroutine _coroutine;
+
 
     private void Start()
     {
+        _isKilled = false;
         _rigid = gameObject.GetComponentInChildren<Rigidbody>();
         _iniTransform = gameObject.GetComponentInChildren<Transform>();
         _maxLoudnessAllowed = _loudnessDetector._maxLoudnessAllowed;        
@@ -76,32 +85,44 @@ public class PlayerController : MonoBehaviour
             Vector3.Lerp(_jumpMinScale, _jumpMaxScale, loudness * _jumpMouSclSens);        
     }
 
-    public void PausePlayer()
-    {
-        _currentSpeed = _speed;
-        _speed = 0;
-        _rigid.velocity = new Vector3(0, 0, 0);
-        
-    }
-
-    public void UnPausePlayer()
-    {
-        _speed = _currentSpeed;
-    }
+ 
 
     public void KillPlayer()
-    {             
-        Transform currentTrans = gameObject.GetComponent<Transform>();
-        gameObject.GetComponent<Transform>().SetPositionAndRotation(_iniTransform.position, _iniTransform.rotation);
-        _rigid.velocity = new Vector3(0, 0, 0);
-
-        RestartGame();
-
-    }
-
-    private void RestartGame()
     {
-        _gameManager.StartGame();
+        if(_isKilled == false)
+        {
+            //Add Delay SFX
+            if (_coroutine != null)
+            {
+                StopCoroutine(_coroutine);
+            }
+            _delayTime = _sfxKilled.length;
+            _coroutine = StartCoroutine(DelayLoadScene(_sfxKilled, "Sandbox2", _delayTime));
+            _isKilled = true;
+            _killedParticles.Play();
+            _playerVisualToDisable.SetActive(false);
+        }
+    }        
+
+    private IEnumerator DelayLoadScene(AudioClip clip, string sceneName, float delayTime)
+    {
+        if (sceneName == "quit")
+        {
+            AudioHelper.PlayClip2D(clip, _sfxVolume);            
+
+            yield return new WaitForSeconds(delayTime);
+
+            Application.Quit();
+        }
+        AudioHelper.PlayClip2D(clip, _sfxVolume);
+        
+        yield return new WaitForSeconds(delayTime);
+
+        LoadScene(sceneName);
     }
 
+    private void LoadScene(string sceneName)
+    {
+        SceneManager.LoadScene(sceneName);
+    }
 }

@@ -8,12 +8,17 @@ public class KillVolume : MonoBehaviour
     [SerializeField] private float _delayTime = 0.3f;
     private IEnumerator _coroutine;
 
+    private void Start()
+    {
+        
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.CompareTag("Player"))
         {            
             _coroutine = StartDelay(_delayTime);
-
+            
             PlayerController playerController = other.gameObject.GetComponent<PlayerController>();
             if ( (playerController != null))
             {
