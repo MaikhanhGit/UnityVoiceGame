@@ -10,6 +10,7 @@ public class BossActivator : MonoBehaviour
     [SerializeField] private float _delayTime = 0.3f;
     [SerializeField] private AudioClip _activateSFX = null;
     private Coroutine _coroutine;
+    private bool _isBossActivated = false;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -17,12 +18,17 @@ public class BossActivator : MonoBehaviour
 
         if(other.tag == "Player")
         {
-            if(_coroutine != null)
+            if(_isBossActivated == false)
             {
-                StopCoroutine(_coroutine);
+                _isBossActivated = true;
+                if (_coroutine != null)
+                {
+                    StopCoroutine(_coroutine);
+                }
+
+                _coroutine = StartCoroutine(DelayFlashScreen());
             }
-          
-            _coroutine = StartCoroutine(DelayFlashScreen());                                  
+                                       
         }
     }
 
@@ -38,5 +44,7 @@ public class BossActivator : MonoBehaviour
         {
             _objectToActivate.SetActive(true);
         }
+
+        gameObject.SetActive(false);
     }
 }

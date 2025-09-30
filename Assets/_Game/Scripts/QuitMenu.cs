@@ -14,6 +14,7 @@ public class QuitMenu : MonoBehaviour
     [SerializeField] float _sfxVolume = 1f;
     [SerializeField] private float _delayTime = 1.0f;
     private Coroutine _coroutine;
+    private bool _isQuit = false;
 
     public void BackToMainMenu()
     {
@@ -31,13 +32,29 @@ public class QuitMenu : MonoBehaviour
 
     public void QuitGame()
     {
-        AnimateQuitBtn();
-        if (_coroutine != null)
+        if(_isQuit == false)
         {
-            StopCoroutine(_coroutine);
+            AnimateQuitBtn();
+            if (_coroutine != null)
+            {
+                StopCoroutine(_coroutine);
+            }
+            _isQuit = true;
+            _delayTime = _sfxBack.length;
+            _coroutine = StartCoroutine(DelayQuit(_sfxBack, _delayTime));
+            
         }
-        _delayTime = _sfxBack.length;
-        _coroutine = StartCoroutine(DelayLoadScene(_sfxBack, "quit", _delayTime));
+       
+    }
+
+    private IEnumerator DelayQuit(AudioClip clip, float delayTime)
+    {        
+            AudioHelper.PlayClip2D(clip, _sfxVolume);
+
+            yield return new WaitForSeconds(delayTime);
+
+            Application.Quit();
+       
     }
 
     private IEnumerator DelayLoadScene(AudioClip clip, string sceneName, float delayTime)

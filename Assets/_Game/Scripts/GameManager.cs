@@ -31,13 +31,9 @@ public class GameManager : MonoBehaviour
     { // TODO: add a delay
                
         SceneManager.LoadScene(_playSceneToLoad);                
-    }
+    }  
     
-
-    public void OpenWin()
-    {
-        SceneManager.LoadScene("WinScene");
-    }
+   
     
     public void ExitGame()
     {

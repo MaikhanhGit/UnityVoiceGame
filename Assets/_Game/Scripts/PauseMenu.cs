@@ -3,17 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+//using UnityEngine.UIElements;
 
 public class PauseMenu : MonoBehaviour
 {
-    [SerializeField] private string _mainMenuScene = "MainMenu";
-    [SerializeField] private string _quitScene = "QuitScene";
+    [SerializeField] private string _mainMenuScene = "MainMenu";   
     [SerializeField] private Button _pauseBtn = null;
     [SerializeField] private Button _menuBtn = null;
+    [SerializeField] private Button _exitBtn = null;
     [SerializeField] private Button _quitBtn = null;
-    [SerializeField] private Button _backBtn = null;
+    [SerializeField] private Button _toGameBtn = null;
+    [SerializeField] private Button _toPauseBtn = null;
     [SerializeField] private GameObject _pauseMenu = null;
+    [SerializeField] private GameObject _pausePanel = null;
     [SerializeField] private GameObject _pauseObj = null;
+    [SerializeField] private GameObject _quitPanel = null;
     [SerializeField] private Vector3 _btnSizeChange = new Vector3(1.4f, 1.4f, 1.4f);
     [SerializeField] private AudioClip _sfxEnter = null;
     [SerializeField] private AudioClip _sfxBack = null;
@@ -23,7 +27,7 @@ public class PauseMenu : MonoBehaviour
 
     public void PauseGame()
     {
-        AnimatePauseBtn();
+        AnimateButton(_pauseBtn);
         //Add Delay SFX
         if (_coroutine != null)
         {
@@ -33,24 +37,23 @@ public class PauseMenu : MonoBehaviour
         _coroutine = StartCoroutine(DelayPause(_sfxEnter, _delayTime));        
     }
 
-    public void UnPauseGame()
-    {
-        
-        ResetAnimatePauseBtn();
+    public void BackToGame()
+    {        
+        AnimateButton(_toGameBtn);
         //Add Delay SFX
         if (_coroutine != null)
         {
             StopCoroutine(_coroutine);
         }
         _delayTime = _sfxBack.length;
-        _coroutine = StartCoroutine(DelayUnpause(_sfxBack, _delayTime));
+        _coroutine = StartCoroutine(DelayBackToGame(_sfxBack, _delayTime));
 
         Time.timeScale = 1;
     }
 
     public void ToMainMenu()
     {       
-        AnimateMenuBtn();
+        AnimateButton(_menuBtn);
         //Add Delay SFX
         if (_coroutine != null)
         {
@@ -61,17 +64,60 @@ public class PauseMenu : MonoBehaviour
         Time.timeScale = 1;
     }
 
-    public void OpenQuit()
+    public void OpenQuitConfirm()
     {
         Time.timeScale = 1;
-        AnimateQuitBtn();
-        //Add Delay;
+        AnimateButton(_exitBtn);
         if (_coroutine != null)
         {
             StopCoroutine(_coroutine);
         }
-        _delayTime = _sfxEnter.length;
-        _coroutine = StartCoroutine(DelayLoadScene(_sfxEnter, _quitScene, _delayTime));
+        _delayTime = _sfxBack.length;
+
+        _coroutine = StartCoroutine(DelayOpenQuitConfirm(_quitPanel, _pausePanel,
+            _exitBtn, _sfxBack, _delayTime));
+        
+        
+
+    }
+
+    public void BackToPauseMenu()
+    {
+        Time.timeScale = 1;
+        AnimateButton(_toPauseBtn);
+        //Add Delay SFX
+        if (_coroutine != null)
+        {
+            StopCoroutine(_coroutine);
+        }
+        _delayTime = _sfxBack.length;
+
+        _coroutine = StartCoroutine(DelayBackToPause(_pausePanel, _quitPanel, _toPauseBtn, _sfxBack, _delayTime));
+                
+    }
+
+    public void QuitGame()
+    {
+        Time.timeScale = 1;
+        AnimateButton(_quitBtn);
+
+        if (_coroutine != null)
+        {
+            StopCoroutine(_coroutine);
+        }
+        _delayTime = _sfxBack.length;
+
+        _coroutine = StartCoroutine(DelayQuitGame(_sfxBack, _delayTime));
+    }
+
+    private IEnumerator DelayQuitGame(AudioClip clip, float delayTime)
+    {
+        AudioHelper.PlayClip2D(clip, _sfxVolume);
+
+        yield return new WaitForSeconds(delayTime);
+
+        Application.Quit();
+
     }
 
     private IEnumerator DelayLoadScene(AudioClip clip, string sceneName, float delayTime)
@@ -95,12 +141,7 @@ public class PauseMenu : MonoBehaviour
     {
         SceneManager.LoadScene(sceneName);
     }
-
-    private void AnimateQuitBtn()
-    {
-        _quitBtn.GetComponent<RectTransform>().localScale = _btnSizeChange;
-
-    }
+    
 
     private IEnumerator DelayPause(AudioClip clip, float delayTime)
     {        
@@ -110,12 +151,11 @@ public class PauseMenu : MonoBehaviour
 
         _pauseMenu.SetActive(true);
         _pauseObj.SetActive(false);
-
-
+        ResetAnimationButton(_pauseBtn);
         Time.timeScale = 0;
     }
 
-    private IEnumerator DelayUnpause(AudioClip clip, float delayTime)
+    private IEnumerator DelayBackToGame(AudioClip clip, float delayTime)
     {
         AudioHelper.PlayClip2D(clip, _sfxVolume);
 
@@ -123,26 +163,45 @@ public class PauseMenu : MonoBehaviour
 
         _pauseObj.SetActive(true);
         _pauseMenu.SetActive(false);
+        ResetAnimationButton(_toGameBtn);       
         
-        
     }
-  
 
-    private void AnimateMenuBtn()
-    {        
-        _menuBtn.GetComponent<RectTransform>().localScale = _btnSizeChange;
-
-    }
-    private void AnimatePauseBtn()
+    private IEnumerator DelayBackToPause(GameObject objToOn, GameObject objToOff, 
+        Button btn, AudioClip clip, float delayTime)
     {
-        _pauseBtn.GetComponent<RectTransform>().localScale = _btnSizeChange;
+        AudioHelper.PlayClip2D(clip, _sfxVolume);
 
+        yield return new WaitForSeconds(delayTime);
+
+        objToOn.SetActive(true);
+        objToOff.SetActive(false);
+        ResetAnimationButton(btn);
+        Time.timeScale = 0;
     }
 
-    private void ResetAnimatePauseBtn()
+    private IEnumerator DelayOpenQuitConfirm(GameObject objToOn, GameObject objToOff,
+       Button btn, AudioClip clip, float delayTime)
     {
-        _pauseBtn.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+        AudioHelper.PlayClip2D(clip, _sfxVolume);
+
+        yield return new WaitForSeconds(delayTime);
+
+        objToOn.SetActive(true);
+        objToOff.SetActive(false);
+        ResetAnimationButton(btn);
+        Time.timeScale = 0;
     }
 
-    
+
+    private void AnimateButton(Button btn)
+    {
+        btn.GetComponent<RectTransform>().localScale = _btnSizeChange;
+    }
+
+    private void ResetAnimationButton(Button btn)
+    {
+        btn.GetComponent<RectTransform>().localScale = new Vector3(1, 1, 1);
+    }
+
 }

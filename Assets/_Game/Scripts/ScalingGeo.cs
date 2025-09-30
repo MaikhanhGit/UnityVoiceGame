@@ -9,7 +9,7 @@ public class ScalingGeo : MonoBehaviour
     [SerializeField] Vector3 _maxScale;
     [SerializeField] float _loudnessSens = 10;
     [SerializeField] float _threshold = 0.1f;
-    [SerializeField] float _yRotationRate = 3f;
+    //[SerializeField] float _yRotationRate = 3f;
     [SerializeField] float _minRandom = -0.5f;
     [SerializeField] float _maxRandom = 0.5f;
     [SerializeField] GameObject[] _objectToScale = null;
